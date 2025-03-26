@@ -14,6 +14,15 @@ let rec sumOfDigits n =
     else
         n % 10 + sumOfDigits (n / 10)
 
+let tailDigitalSum n : int =
+     let rec digitalSubSum n currentSum = 
+         if n = 0 then currentSum
+         else
+             let currentNum = n / 10
+             let digital = n % 10
+             let accumulator = currentSum + digital
+             digitalSubSum currentNum accumulator
+     digitalSubSum n 0
 
 [<EntryPoint>]
 let main argv =
@@ -31,4 +40,9 @@ let main argv =
     let sum1 = sumOfDigits n
     System.Console.WriteLine($"Рекурсия вверх: {sum1}") 
 
+    let sum2 = tailDigitalSum n
+    Console.WriteLine($"Рекурсия вниз: {sum2}")
+
+
+  
     0 
