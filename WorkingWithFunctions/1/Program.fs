@@ -6,10 +6,9 @@ let areaOfCircle r =
     pi * r * r
 
 let volumeOfCylinder r h =
-    areaOfCircle r * h
+     r * h
 
-let curryCylinderVolume h = 
-     fun r -> volumeOfCylinder h r
+let supCylinderVolume h = volumeOfCylinder h >> (areaOfCircle)
 
 [<EntryPoint>]
 let main argv =
@@ -20,12 +19,8 @@ let main argv =
     printfn "Введите высоту цилиндра:"
     let h = Console.ReadLine() |> float
 
-    let area = areaOfCircle r
-    let volume = volumeOfCylinder r h
-
-
-    printfn "Площадь круга: %.2f" area
-    printfn "Объем цилиндра: %.2f" volume
+    let v = supCylinderVolume h r
+    System.Console.WriteLine(v) 
 
   
     0 
