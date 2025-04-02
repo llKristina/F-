@@ -95,6 +95,9 @@ let traverseCoprimes n operation init =
                 loop (i + 1) acc
     loop 1 init
 
+// 14
+let eulerPhi n =
+    traverseCoprimes n (fun acc _ -> acc + 1) 0
 
 [<EntryPoint>]
 let main argv =
@@ -148,4 +151,8 @@ let main argv =
     let countCoprimes20 = traverseCoprimes 20 (fun acc _ -> acc + 1) 0
     Console.WriteLine($"Количество взаимно простых с 20: {countCoprimes20}")
 
+    // 14
+    Console.WriteLine("Тестирование функции Эйлера φ(n):")
+    Console.WriteLine($"φ(5) = {eulerPhi 5} (ожидается 4)")
+    Console.WriteLine($"φ(9) = {eulerPhi 9} (ожидается 6)") 
     0 
