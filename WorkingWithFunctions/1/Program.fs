@@ -80,6 +80,20 @@ let generateResponse (language: string) =
     | "c#" -> "Хороший язык, особенно с .NET"
     | "ruby" -> "Rails или чистый Ruby?"
     
+//13
+let rec gcd a b =
+    if b = 0 then abs a
+    else gcd b (a % b)
+
+let traverseCoprimes n operation init =
+    let rec loop i acc =
+        if i > n then acc
+        else
+            if gcd i n = 1 then
+                loop (i + 1) (operation acc i)
+            else
+                loop (i + 1) acc
+    loop 1 init
 
 
 [<EntryPoint>]
@@ -125,5 +139,13 @@ let main argv =
     let printAndRead (msg: string) = Console.WriteLine(msg); Console.ReadLine()
     let processInput (input: string) = generateResponse input |> Console.WriteLine
     printAndRead "Какой твой любимый язык программирования?" |> processInput
+
+    // 13
+    let sumCoprimes10 = traverseCoprimes 10 (fun acc x -> acc + x) 0
+    Console.WriteLine($"Сумма взаимно простых с 10: {sumCoprimes10}")
+    let productCoprimes15 = traverseCoprimes 15 (fun acc x -> acc * x) 1
+    Console.WriteLine($"Произведение взаимно простых с 15: {productCoprimes15}")
+    let countCoprimes20 = traverseCoprimes 20 (fun acc _ -> acc + 1) 0
+    Console.WriteLine($"Количество взаимно простых с 20: {countCoprimes20}")
 
     0 
