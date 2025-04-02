@@ -222,7 +222,7 @@ let main argv =
     System.Console.WriteLine(main9 711 (fun x y -> match x<y with| true -> x| false -> y) 9 (fun x -> false))
 
     // 12 
-    let printAndRead (msg: string) = Console.WriteLine(msg); Console.ReadLine()
+    //let printAndRead (msg: string) = Console.WriteLine(msg); Console.ReadLine()
     //let processInput (input: string) = generateResponse input |> Console.WriteLine
     //printAndRead "Какой твой любимый язык программирования?" |> processInput
 
