@@ -140,6 +140,16 @@ let sumOfPrimeDivisors n =
             loop (divisor + 1) acc
     loop 2 0
 
+// Метод 2: Количество нечетных цифр числа, больших 3
+let countOddDigitsGreater3 n =
+    let rec loop num acc =
+        if num = 0 then acc
+        else
+            let digit = num % 10
+            let newAcc = if digit > 3 && digit % 2 <> 0 then acc + 1 else acc
+            loop (num / 10) newAcc
+    loop n 0
+
 [<EntryPoint>]
 let main argv =
 
@@ -205,4 +215,5 @@ let main argv =
 
     //16
     Console.WriteLine($"1. Сумма простых делителей: {sumOfPrimeDivisors 36}")
+    Console.WriteLine($"2. Количество нечётных цифр >3: {countOddDigitsGreater3 35}")
     0 
