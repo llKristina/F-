@@ -43,8 +43,6 @@ let quanDelVN x =
 
 // 7
 
-let sum_digits rez digit = rez + digit
-
 let main7 digit funct init =
     let rec step digit rez=
         let next_rez = funct rez (digit%10) 
@@ -56,6 +54,7 @@ let main7 digit funct init =
 
     step digit init
     
+
 
 [<EntryPoint>]
 let main argv =
@@ -80,6 +79,12 @@ let main argv =
 
     System.Console.WriteLine(quanDelVN 10)
     
-    System.Console.WriteLine(main7 10 sum_digits 0)
+    // 8
+    let sum a b = a+b
+    System.Console.WriteLine("Task 7")
+    System.Console.WriteLine(main7 711 (fun x y -> x+y) 0)
+    System.Console.WriteLine(main7 271 (fun x y -> x*y) 1)
+    System.Console.WriteLine(main7 711 (fun x y -> match x>y with| true -> x| false -> y) 0)
+    System.Console.WriteLine(main7 711 (fun x y -> match x<y with| true -> x| false -> y) 9)
   
     0 
