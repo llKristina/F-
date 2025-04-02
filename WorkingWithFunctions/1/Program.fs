@@ -161,6 +161,23 @@ let productOfSpecialDivisors n =
             loop (divisor + 1) acc
     loop 1 1
 
+// 20
+let getFunction = function
+    | 1 -> sumOfPrimeDivisors   
+    | 2 -> countOddDigitsGreater3  
+    | 3 -> productOfSpecialDivisors  
+    | _ -> failwith "Неверный номер функции. Допустимо: 1, 2, 3"
+
+let processInput =
+    Console.ReadLine >> 
+    (fun s -> match s.Split(',') with 
+              | [|x; y|] -> (int x, int y) 
+              | _ -> failwith "Введите номер функции (1-3) и число через запятую, например: '1,36'") >>
+    (fun (n, arg) -> getFunction n arg) >>
+    string >>
+    (fun res -> "Результат: " + res) >>
+    Console.WriteLine
+
 [<EntryPoint>]
 let main argv =
 
@@ -203,7 +220,7 @@ let main argv =
     // 12 
     let printAndRead (msg: string) = Console.WriteLine(msg); Console.ReadLine()
     let processInput (input: string) = generateResponse input |> Console.WriteLine
-    printAndRead "Какой твой любимый язык программирования?" |> processInput
+    //printAndRead "Какой твой любимый язык программирования?" |> processInput
 
     // 13
     let sumCoprimes10 = traverseCoprimes 10 (fun acc x -> acc + x) 0
@@ -228,4 +245,17 @@ let main argv =
     Console.WriteLine($"1. Сумма простых делителей: {sumOfPrimeDivisors 36}")
     Console.WriteLine($"2. Количество нечётных цифр >3: {countOddDigitsGreater3 35}")
     Console.WriteLine($"3. Произведение делителей с суммой цифр < исходной: {productOfSpecialDivisors 36}")
+   
+   //20
+    Console.WriteLine("Введите номер функции (1-3) и число через запятую:")
+    Console.WriteLine("1 - Сумма простых делителей")
+    Console.WriteLine("2 - Количество нечетных цифр >3")
+    Console.WriteLine("3 - Произведение делителей с суммой цифр < исходной")
+
+    try
+        let input = Console.ReadLine()
+        let result = processInput input
+        Console.WriteLine(result)
+    with
+    | ex -> Console.WriteLine("Ошибка: " + ex.Message)
     0 
