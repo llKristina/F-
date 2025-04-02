@@ -150,6 +150,17 @@ let countOddDigitsGreater3 n =
             loop (num / 10) newAcc
     loop n 0
 
+// Метод 3: Произведение делителей с суммой цифр меньше исходной
+let productOfSpecialDivisors n =
+    let originalSum = sumOfDigits n
+    let rec loop divisor acc =
+        if divisor > n then acc
+        elif n % divisor = 0 && sumOfDigits divisor < originalSum then
+            loop (divisor + 1) (acc * divisor)
+        else
+            loop (divisor + 1) acc
+    loop 1 1
+
 [<EntryPoint>]
 let main argv =
 
@@ -216,4 +227,5 @@ let main argv =
     //16
     Console.WriteLine($"1. Сумма простых делителей: {sumOfPrimeDivisors 36}")
     Console.WriteLine($"2. Количество нечётных цифр >3: {countOddDigitsGreater3 35}")
+    Console.WriteLine($"3. Произведение делителей с суммой цифр < исходной: {productOfSpecialDivisors 36}")
     0 
