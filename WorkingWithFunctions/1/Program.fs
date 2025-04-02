@@ -53,6 +53,24 @@ let main7 digit funct init =
         | _ -> next_rez
 
     step digit init
+
+//9
+let main9 digit funct init funcItsNeed=
+     let rec step digit rez=
+         let itsNeed = funcItsNeed (digit%10)
+         let next_digit = digit/10
+ 
+         let next_rez = funct rez (digit%10) 
+        
+         match (next_digit, itsNeed) with
+         | (next_digit,true) when next_digit > 0 -> step next_digit next_rez
+         | (next_digit,false) when next_digit > 0 -> step next_digit rez 
+         | (next_digit,true) -> next_rez
+         | _ -> rez
+ 
+     step digit init
+ 
+ 
     
 
 
