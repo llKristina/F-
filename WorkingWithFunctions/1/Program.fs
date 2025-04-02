@@ -72,13 +72,13 @@ let main9 digit funct init funcItsNeed=
  
 
  // 11
-let generateResponse (language: string) =
-    match language.ToLower() with
-    | "f#" | "prolog" -> "Ты — подлиза!"
-    | "python" -> "Неплохой выбор, но F# лучше!"
-    | "javascript" -> "Frontend или Node.js?"
-    | "c#" -> "Хороший язык, особенно с .NET"
-    | "ruby" -> "Rails или чистый Ruby?"
+//let generateResponse (language: string) =
+    //match language.ToLower() with
+    //| "f#" | "prolog" -> "Ты — подлиза!"
+   // | "python" -> "Неплохой выбор, но F# лучше!"
+    //| "javascript" -> "Frontend или Node.js?"
+    //| "c#" -> "Хороший язык, особенно с .NET"
+    //| "ruby" -> "Rails или чистый Ruby?"
     
 //13
 let rec gcd a b =
@@ -168,15 +168,19 @@ let getFunction = function
     | 3 -> productOfSpecialDivisors  
     | _ -> failwith "Неверный номер функции. Допустимо: 1, 2, 3"
 
-let processInput =
-    Console.ReadLine >> 
-    (fun s -> match s.Split(',') with 
-              | [|x; y|] -> (int x, int y) 
-              | _ -> failwith "Введите номер функции (1-3) и число через запятую, например: '1,36'") >>
-    (fun (n, arg) -> getFunction n arg) >>
-    string >>
-    (fun res -> "Результат: " + res) >>
-    Console.WriteLine
+let processInput (input: string) =
+    match input.Split(',') with
+    | [|x; y|] -> 
+        try 
+            let n, arg = int x, int y
+            getFunction n arg
+            |> string
+            |> sprintf "Результат: %s"
+        with 
+        | :? FormatException -> "Ошибка: введите числа в правильном формате"
+        | ex -> $"Ошибка: {ex.Message}"
+    | _ -> "Ошибка: введите данные в формате 'номер,число'"
+    |> Console.WriteLine
 
 [<EntryPoint>]
 let main argv =
@@ -219,7 +223,7 @@ let main argv =
 
     // 12 
     let printAndRead (msg: string) = Console.WriteLine(msg); Console.ReadLine()
-    let processInput (input: string) = generateResponse input |> Console.WriteLine
+    //let processInput (input: string) = generateResponse input |> Console.WriteLine
     //printAndRead "Какой твой любимый язык программирования?" |> processInput
 
     // 13
@@ -252,10 +256,5 @@ let main argv =
     Console.WriteLine("2 - Количество нечетных цифр >3")
     Console.WriteLine("3 - Произведение делителей с суммой цифр < исходной")
 
-    try
-        let input = Console.ReadLine()
-        let result = processInput input
-        Console.WriteLine(result)
-    with
-    | ex -> Console.WriteLine("Ошибка: " + ex.Message)
+    Console.ReadLine() |> processInput
     0 
