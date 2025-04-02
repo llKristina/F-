@@ -99,6 +99,27 @@ let traverseCoprimes n operation init =
 let eulerPhi n =
     traverseCoprimes n (fun acc _ -> acc + 1) 0
 
+//15 
+let isCoprime a b = gcd a b = 1
+
+let main15 number operation initialValue condition =
+    let rec processDigits remainingValue currentResult =
+        let currentDigit = remainingValue % 10
+        let meetsConditions = isCoprime currentDigit number && condition currentDigit
+        let nextValue = remainingValue / 10
+        
+        let updatedResult = 
+            match meetsConditions with
+            | true -> operation currentResult currentDigit
+            | false -> currentResult
+        
+        match (nextValue, meetsConditions) with
+        | (0, true) -> updatedResult
+        | (0, false) -> currentResult
+        | (_, _) -> processDigits nextValue updatedResult
+    
+    processDigits number initialValue 
+
 [<EntryPoint>]
 let main argv =
 
@@ -155,4 +176,10 @@ let main argv =
     Console.WriteLine("Тестирование функции Эйлера φ(n):")
     Console.WriteLine($"φ(5) = {eulerPhi 5} (ожидается 4)")
     Console.WriteLine($"φ(9) = {eulerPhi 9} (ожидается 6)") 
+
+    // 15
+    let sumTest = main15 15 (+) 0 (fun x -> x > 3)
+    Console.WriteLine($"Сумма цифр >3 и взаимно простых с 15: {sumTest}")  
+    let productTest = main15 10 (*) 1 (fun x -> x % 2 = 0)
+    Console.WriteLine($"Произведение чётных цифр, взаимно простых с 10: {productTest}")  
     0 
