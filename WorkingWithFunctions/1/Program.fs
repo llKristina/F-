@@ -121,10 +121,10 @@ let main argv =
     System.Console.WriteLine(main9 111 (fun x y -> match x>y with| true -> x| false -> y) 0 (fun x -> match x with |x when x>5 -> true|_ -> false))
     System.Console.WriteLine(main9 711 (fun x y -> match x<y with| true -> x| false -> y) 9 (fun x -> false))
 
-    // 11
-    Console.WriteLine("Какой твой любимый язык программирования?")
-    let userLanguage = Console.ReadLine()
-    let response = generateResponse userLanguage
-    Console.WriteLine(response)
-
+    // 11 
+    (fun (s: string) -> Console.WriteLine(s)) 
+    >> (fun _ -> Console.ReadLine()) 
+    >> generateResponse 
+    >> Console.WriteLine 
+    <| "Какой твой любимый язык программирования?"
     0 
