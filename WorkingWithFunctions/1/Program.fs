@@ -120,6 +120,26 @@ let main15 number operation initialValue condition =
     
     processDigits number initialValue 
 
+// 16
+// Метод 1: Сумма простых делителей числа
+let isPrime n =
+    if n <= 1 then false
+    else
+        let rec check i =
+            if i * i > n then true
+            elif n % i = 0 then false
+            else check (i + 1)
+        check 2
+
+let sumOfPrimeDivisors n =
+    let rec loop divisor acc =
+        if divisor > n then acc
+        elif n % divisor = 0 && isPrime divisor then
+            loop (divisor + 1) (acc + divisor)
+        else
+            loop (divisor + 1) acc
+    loop 2 0
+
 [<EntryPoint>]
 let main argv =
 
@@ -182,4 +202,7 @@ let main argv =
     Console.WriteLine($"Сумма цифр >3 и взаимно простых с 15: {sumTest}")  
     let productTest = main15 10 (*) 1 (fun x -> x % 2 = 0)
     Console.WriteLine($"Произведение чётных цифр, взаимно простых с 10: {productTest}")  
+
+    //16
+    Console.WriteLine($"1. Сумма простых делителей: {sumOfPrimeDivisors 36}")
     0 
