@@ -40,3 +40,14 @@ let mostFrequent lst =
 let lst = [1;2;3;2;1;2;2]
 let result = mostFrequent lst
 printfn "%A" result 
+
+//8 задание
+let countSquares lst =
+    let uniqueElements = List.distinct lst
+    lst
+    |>List.filter (fun x -> uniqueElements |> List.exists (fun y -> y* y=x))
+    |>List.length
+
+let list =[2;4;3;16;5]
+let res = countSquares list
+printfn "%A" res
