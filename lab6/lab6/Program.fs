@@ -237,4 +237,44 @@ let countRussianCharacters (input: string) =
     |> Seq.length
 
 let testString1 = "Hello, мир!"
-printfn "Тест 1: %d" (countRussianCharacters testString1)  
+printfn "Количество символов: %d" (countRussianCharacters testString1)  
+
+//20 задание
+let vowels = set ['а'; 'е'; 'ё'; 'и'; 'о'; 'у'; 'ы'; 'э'; 'ю'; 'я';
+                   'А'; 'Е'; 'Ё'; 'И'; 'О'; 'У'; 'Ы'; 'Э'; 'Ю'; 'Я']
+
+let countLetters (str: string) =
+    let mutable vowelsCount = 0
+    let mutable consonantsCount = 0
+    
+    for c in str do
+        if System.Char.IsLetter(c) then
+            if vowels.Contains(c) then vowelsCount <- vowelsCount + 1
+            else consonantsCount <- consonantsCount + 1
+    
+    (vowelsCount, consonantsCount)
+
+let calculateDifference (v, c) =
+    let total = v + c
+    if total = 0 then 0.0
+    else (float c / float total) - (float v / float total)
+
+let sortStrings (strings: string list) =
+    strings
+    |> List.map (fun s -> 
+        let counts = countLetters s
+        (s, calculateDifference counts))
+    |> List.sortBy snd
+    |> List.map fst
+
+let testStrings = [
+    "Привет, мир!"               
+    "Программирование на F#"      
+    "АБВГДЕЁЖЗИЙ"                 
+    "12345!@#$%"                  
+    "ООО Ааа"                    
+]
+
+let sorted = sortStrings testStrings
+
+sorted |> List.iter (printfn "%s")
