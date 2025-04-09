@@ -188,8 +188,8 @@ let countEven2 lst =
     loop 0 lst
 
 let list2 = [2; 1; 4; 6; 3; 8]
-let t31 = list2 |> countEven1 // 4
-let t32 = countEven2 list2    // 4
+let t31 = list2 |> countEven1 
+let t32 = countEven2 list2    
 printfn "Количество чётных: %A и %A" t31 t32
 
 //15 задание
@@ -205,3 +205,23 @@ let list3 = [-3; 4; -2; 5]
 let t41 = averageAbs1 list3  
 let t42 = averageAbs2 list3  
 printfn "Среднее модулей: %A и %A" t41 t42
+
+//16 задание
+let frequencyLists1 lst =
+    let grouped = lst |> List.countBy id
+    (grouped |> List.map fst, grouped |> List.map snd)
+
+let frequencyLists2 lst =
+    let rec build acc = function
+        | [] -> acc
+        | h::t -> 
+            if List.exists (fst >> (=) h) acc 
+            then build (List.map (fun (x,c) -> if x = h then (x,c+1) else (x,c)) acc) t
+            else build ((h,1)::acc) t
+    let result = build [] lst |> List.rev
+    (List.map fst result, List.map snd result)
+
+let list4 = [1; 2; 1; 3; 2; 2; 4]
+let (l1_1, l2_1) = frequencyLists1 list4 
+let (l1_2, l2_2) = frequencyLists2 list4 
+printfn "Частотные списки:\nL1: %A L2: %A\nL1: %A L2: %A" l1_1 l2_1 l1_2 l2_2
