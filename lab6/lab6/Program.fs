@@ -134,9 +134,9 @@ let countAfterMax2 lst =
     loop 0 (List.head lst) (List.tail lst)
 
 let test1 = [3; 1; 4; 1; 5; 9; 2; 6; 5; 3; 5]
-countAfterMax1 test1 
-countAfterMax2 test1
-
+let t1 = countAfterMax1 test1 
+let t2 = countAfterMax2 test1
+printfn "Элементы после последнего максимума: %A и %A" t1 t2
 //12 задание
 let findUnique1 lst =
     lst
@@ -153,5 +153,27 @@ let findUnique2 lst =
     | _ -> lst |> List.find (fun x -> x <> lst.[0])
 
 let test2 = [5;5;5;3;5]
-findUnique1 test2 
-findUnique2 test2 
+let t11 = findUnique1 test2 
+let t12 = findUnique2 test2 
+printfn "Уникальный элемент: %A и %A" t11 t12
+
+
+//13 задание
+let elementsAfterFirstMax1 lst =
+    let maxVal = List.max lst
+    lst 
+    |> List.skipWhile (fun x -> x <> maxVal)
+    |> List.tail
+
+let elementsAfterFirstMax2 lst =
+    let rec loop found acc = function
+        | [] -> List.rev acc
+        | h::t when not found && h = List.max lst -> loop true [] t
+        | h::t when found -> loop found (h::acc) t
+        | _::t -> loop found acc t
+    loop false [] lst
+
+let list1 = [3; 5; 2; 5; 7; 1]
+let t21 = elementsAfterFirstMax1 list1 
+let t22 = elementsAfterFirstMax2 list1 
+printfn "Элементы после первого максимума: %A и %A" t21 t22
