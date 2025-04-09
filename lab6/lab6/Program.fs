@@ -177,3 +177,17 @@ let list1 = [3; 5; 2; 5; 7; 1]
 let t21 = elementsAfterFirstMax1 list1 
 let t22 = elementsAfterFirstMax2 list1 
 printfn "Элементы после первого максимума: %A и %A" t21 t22
+
+//14 задание 
+let countEven1 = List.filter (fun x -> x % 2 = 0) >> List.length
+
+let countEven2 lst =
+    let rec loop acc = function
+        | [] -> acc
+        | h::t -> loop (if h % 2 = 0 then acc + 1 else acc) t
+    loop 0 lst
+
+let list2 = [2; 1; 4; 6; 3; 8]
+let t31 = list2 |> countEven1 // 4
+let t32 = countEven2 list2    // 4
+printfn "Количество чётных: %A и %A" t31 t32
