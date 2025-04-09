@@ -191,3 +191,17 @@ let list2 = [2; 1; 4; 6; 3; 8]
 let t31 = list2 |> countEven1 // 4
 let t32 = countEven2 list2    // 4
 printfn "Количество чётных: %A и %A" t31 t32
+
+//15 задание
+let averageAbs1 = List.averageBy (float << abs)
+
+let averageAbs2 lst =
+    let rec loop sum cnt = function
+        | [] -> sum / float cnt
+        | h::t -> loop (sum + float (abs h)) (cnt + 1) t
+    loop 0.0 0 lst
+
+let list3 = [-3; 4; -2; 5]
+let t41 = averageAbs1 list3  
+let t42 = averageAbs2 list3  
+printfn "Среднее модулей: %A и %A" t41 t42
