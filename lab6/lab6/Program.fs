@@ -88,7 +88,7 @@ let createTuples (listA: int list) (listB: int list) (listC: int list) =
         |> List.map (fun ((ia, a), (ib, b), (ic, c)) ->
             match (ia = ib, ib = ic) with
             | (true, true) -> (a, b, c)
-            | _ -> failwith "Lists have different lengths")
+            | _ -> failwith "Списки имеют разную длину")
     
     combined
 
@@ -98,3 +98,19 @@ let listC = [12; 7; 24; 15]
 
 let result1 = createTuples listA listB listC
 printfn "%A" result1
+
+//10 задание
+let listSort () =
+    printfn "Введите строки"
+    let rec readLines acc =
+        match System.Console.ReadLine() with 
+        | "0" -> acc
+        | line -> readLines (line::acc)
+
+    let stringList = readLines [] |> List.rev
+
+    stringList
+    |> List.sortBy (fun s -> s.Length)
+    |> List.iter (printfn "%s")
+
+listSort ()
