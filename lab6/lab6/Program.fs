@@ -100,17 +100,40 @@ let result1 = createTuples listA listB listC
 printfn "%A" result1
 
 //10 задание
-let listSort () =
-    printfn "Введите строки"
-    let rec readLines acc =
-        match System.Console.ReadLine() with 
-        | "0" -> acc
-        | line -> readLines (line::acc)
+//let listSort () =
+//   printfn "Введите строки"
+//    let rec readLines acc =
+//        match System.Console.ReadLine() with 
+//        | "0" -> acc
+//        | line -> readLines (line::acc)
+//
+//    let stringList = readLines [] |> List.rev
 
-    let stringList = readLines [] |> List.rev
+//    stringList
+//    |> List.sortBy (fun s -> s.Length)
+//    |> List.iter (printfn "%s")
 
-    stringList
-    |> List.sortBy (fun s -> s.Length)
-    |> List.iter (printfn "%s")
+//listSort ()
 
-listSort ()
+//11 задание
+let countAfterMax1 lst =
+    let maxVal = List.max lst
+    lst 
+    |> List.rev
+    |> List.takeWhile (fun x -> x <> maxVal)
+    |> List.length
+
+let countAfterMax2 lst =
+    let rec loop acc maxVal remaining =
+        match remaining with
+        | [] -> acc
+        | h::t ->
+            let newMax = max h maxVal
+            if h = newMax then loop 0 newMax t
+            else loop (acc + 1) newMax t
+    loop 0 (List.head lst) (List.tail lst)
+
+let test1 = [3; 1; 4; 1; 5; 9; 2; 6; 5; 3; 5]
+countAfterMax1 test1 
+countAfterMax2 test1
+
