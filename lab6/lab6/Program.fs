@@ -225,3 +225,16 @@ let list4 = [1; 2; 1; 3; 2; 2; 4]
 let (l1_1, l2_1) = frequencyLists1 list4 
 let (l1_2, l2_2) = frequencyLists2 list4 
 printfn "Частотные списки:\nL1: %A L2: %A\nL1: %A L2: %A" l1_1 l2_1 l1_2 l2_2
+
+//19 задание
+let countRussianCharacters (input: string) =
+    input
+    |> Seq.filter (fun c ->
+        (c >= 'А' && c <= 'Я') || 
+        (c >= 'а' && c <= 'я') || 
+        c = 'Ё' || 
+        c = 'ё')
+    |> Seq.length
+
+let testString1 = "Hello, мир!"
+printfn "Тест 1: %d" (countRussianCharacters testString1)  
