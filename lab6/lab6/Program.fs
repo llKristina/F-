@@ -137,3 +137,21 @@ let test1 = [3; 1; 4; 1; 5; 9; 2; 6; 5; 3; 5]
 countAfterMax1 test1 
 countAfterMax2 test1
 
+//12 задание
+let findUnique1 lst =
+    lst
+    |> List.groupBy id
+    |> List.find (snd >> List.length >> (=) 1)
+    |> fst
+
+let findUnique2 lst =
+    let rec loop a b = function
+        | [] -> if a <> b then a else b
+        | h::t -> if h <> a && h <> b then h else loop a b t
+    match lst with
+    | x::y::z_ when x = y -> loop x y lst
+    | _ -> lst |> List.find (fun x -> x <> lst.[0])
+
+let test2 = [5;5;5;3;5]
+findUnique1 test2 
+findUnique2 test2 
