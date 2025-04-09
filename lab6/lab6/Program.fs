@@ -51,3 +51,50 @@ let countSquares lst =
 let list =[2;4;3;16;5]
 let res = countSquares list
 printfn "%A" res
+
+//9 задание
+let sumOfDigits n =
+    let rec loop num acc =
+        match num with
+        | 0 -> acc
+        | _ -> loop (num / 10) (acc + num % 10)
+    loop (abs n) 0
+
+let countDivisors n =
+    match n with
+    | 0 -> 0
+    | _ ->
+        let nAbs = abs n
+        [1..nAbs] |> List.filter (fun x -> nAbs % x = 0) |> List.length
+
+let createTuples (listA: int list) (listB: int list) (listC: int list) =
+    let processedA = 
+        listA 
+        |> List.sortDescending
+        |> List.mapi (fun i x -> (i, x))
+    
+    let processedB =
+        listB
+        |> List.sortBy (fun x -> (sumOfDigits x, -abs x))
+        |> List.mapi (fun i x -> (i, x))
+    
+    let processedC =
+        listC
+        |> List.sortByDescending (fun x -> (countDivisors x, abs x))
+        |> List.mapi (fun i x -> (i, x))
+    
+    let combined =
+        List.zip3 processedA processedB processedC
+        |> List.map (fun ((ia, a), (ib, b), (ic, c)) ->
+            match (ia = ib, ib = ic) with
+            | (true, true) -> (a, b, c)
+            | _ -> failwith "Lists have different lengths")
+    
+    combined
+
+let listA = [10; 5; 8; 3]
+let listB = [23; 45; 19; 32]
+let listC = [12; 7; 24; 15]
+
+let result1 = createTuples listA listB listC
+printfn "%A" result1
