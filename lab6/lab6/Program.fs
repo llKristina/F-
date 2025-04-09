@@ -226,6 +226,10 @@ let (l1_1, l2_1) = frequencyLists1 list4
 let (l1_2, l2_2) = frequencyLists2 list4 
 printfn "Частотные списки:\nL1: %A L2: %A\nL1: %A L2: %A" l1_1 l2_1 l1_2 l2_2
 
+//18 задание
+let mas (arr: 'a[]) = Array.rev arr
+mas [|"П";"р";"и";"в";"е";"т"|] |> printfn "%A"
+
 //19 задание
 let countRussianCharacters (input: string) =
     input
@@ -278,3 +282,4 @@ let testStrings = [
 let sorted = sortStrings testStrings
 
 sorted |> List.iter (printfn "%s")
+
