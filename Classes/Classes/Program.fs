@@ -1,5 +1,8 @@
 ﻿open System
 
+type IPrint =
+    abstract member Print : unit -> unit
+
 [<AbstractClass>]
 type GeometricFigure() =
     abstract member Area : float
@@ -13,6 +16,8 @@ type Rectangle(width: float, height: float) =
      override this.ToString() =
         sprintf "Прямоугольник [Ширина: %.2f, Высота: %.2f, Площадь: %.2f]" 
             this.Width this.Height this.Area
+    interface IPrint with
+        member this.Print() = printfn "%O" this
 
 type Square(side: float) =
     inherit Rectangle(side, side) 
@@ -30,11 +35,13 @@ type Circle(radius: float) =
         override this.ToString() =
         sprintf "Круг [Радиус: %.2f, Площадь: %.2f]" 
             this.Radius this.Area
+    interface IPrint with
+        member this.Print() = printfn "%O" this
 
-let figures: GeometricFigure list = [
+let figures: IPrint  list = [
     Rectangle(5.0, 3.0)
     Square(4.0)
     Circle(2.5)
 ]
 
-figures |> List.iter (fun fig -> printfn "%O" fig)
+figures |> List.iter (fun f -> f.Print())
