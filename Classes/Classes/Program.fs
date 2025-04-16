@@ -187,11 +187,87 @@ let agent = MailboxProcessor<AgentMessage>.Start(fun inbox ->
     loop ()
 )
 
-agent.Post(Greet "Иван")
-agent.Post(Calculate(5, 7))
-async {
-    let! number = agent.PostAndAsyncReply(GetRandomNumber)
-    printfn "Получено случайное число: %d" number
-} |> Async.Start
-Async.Sleep 100 |> Async.RunSynchronously
-agent.Post(Shutdown)
+//agent.Post(Greet "Иван")
+//agent.Post(Calculate(5, 7))
+//async {
+//    let! number = agent.PostAndAsyncReply(GetRandomNumber)
+//    printfn "Получено случайное число: %d" number
+//} |> Async.Start
+//Async.Sleep 100 |> Async.RunSynchronously
+//agent.Post(Shutdown)
+
+//task 5
+open System
+open System.Text.RegularExpressions
+
+type Passport
+    (
+        series: string,
+        number: string,
+        issueDate: string,
+        issuedBy: string,
+        departmentCode: string,
+        firstName: string,
+        lastName: string,
+        middleName: string option,
+        birthDate: string,
+        birthPlace: string
+    ) =
+
+    member val Series = series with get, set
+    member val Number = number with get, set
+    member val IssueDate = issueDate with get, set
+    member val IssuedBy = issuedBy with get, set
+    member val DepartmentCode = departmentCode with get, set
+    member val FirstName = firstName with get, set
+    member val LastName = lastName with get, set
+    member val MiddleName = middleName with get, set
+    member val BirthDate = birthDate with get, set
+    member val BirthPlace = birthPlace with get, set
+
+    member this.Validate() =
+        let datePattern = @"^\d{2}\.\d{2}\.\d{4}$"       
+        let seriesPattern = @"^\d{4}$"
+        let numberPattern = @"^\d{6}$"
+        let depCodePattern = @"^\d{3}-\d{3}$"            
+        let namePattern = @"^[А-Яа-яA-Za-z\-]+$"
+
+        Regex.IsMatch(this.Series, seriesPattern) &&
+        Regex.IsMatch(this.Number, numberPattern) &&
+        Regex.IsMatch(this.IssueDate, datePattern) &&
+        Regex.IsMatch(this.BirthDate, datePattern) &&
+        Regex.IsMatch(this.DepartmentCode, depCodePattern) &&
+        Regex.IsMatch(this.FirstName, namePattern) &&
+        Regex.IsMatch(this.LastName, namePattern) &&
+        (match this.MiddleName with
+         | Some mn -> Regex.IsMatch(mn, namePattern)
+         | None -> true)
+
+
+    member this.CompareTo(other: Passport) =
+        let key1 = this.Series + this.Number
+        let key2 = other.Series + other.Number
+        String.Compare(key1, key2)
+
+ 
+    override this.ToString() =
+        let mid = match this.MiddleName with Some m -> m | None -> ""
+        sprintf "Паспорт гражданина РФ\nФИО: %s %s %s\nДата рождения: %s\nМесто рождения: %s\nСерия: %s\nНомер: %s\nДата выдачи: %s\nКем выдан: %s\nКод подразделения: %s"
+            this.LastName this.FirstName mid this.BirthDate this.BirthPlace this.Series this.Number this.IssueDate this.IssuedBy this.DepartmentCode
+
+
+[<EntryPoint>]
+let main argv =
+    let passport = Passport(
+        "1234", "567890", "15.04.2015", "ОУФМС России по г. Москве", "770-001",
+        "Иван", "Иванов", Some "Иванович", "01.01.1990", "г. Москва"
+    )
+
+    printfn "%s" (passport.ToString())
+
+    if passport.Validate() then
+        printfn "Паспорт прошёл валидацию"
+    else
+        printfn "Паспорт НЕ прошёл валидацию"
+
+    0
