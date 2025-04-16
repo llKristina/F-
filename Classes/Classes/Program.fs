@@ -25,6 +25,8 @@ type Square(side: float) =
     override this.ToString() =
         sprintf "Квадрат [Сторона: %.2f, Площадь: %.2f]" 
             this.Side this.Area
+    interface IPrint with
+        member this.Print() = printfn "%O" this
 
 let pi = 3.14159
 type Circle(radius: float) =
@@ -45,3 +47,24 @@ let figures: IPrint  list = [
 ]
 
 figures |> List.iter (fun f -> f.Print())
+
+
+type GeometricFigure2 =
+    | Rectangle of width: float * height: float
+    | Square of side: float
+    | Circle of radius: float
+    member this.Area =
+        match this with
+        | Rectangle(w, h) -> w * h
+        | Square(s) -> s * s
+        | Circle(r) -> Math.PI * r * r
+    override this.ToString() =
+        match this with
+        | Rectangle(w, h) -> 
+            sprintf "Прямоугольник [ширина: %.2f, высота: %.2f, площадь: %.2f]" w h this.Area
+        | Square(s) -> 
+            sprintf "Квадрат [сторона: %.2f, площадь: %.2f]" s this.Area
+        | Circle(r) -> 
+            sprintf "Круг [радиус: %.2f, площадь: %.2f]" r this.Area
+
+figures |> List.iter (fun f -> (f :> IPrint).Print())
