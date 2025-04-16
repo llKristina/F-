@@ -57,7 +57,7 @@ type GeometricFigure2 =
         match this with
         | Rectangle(w, h) -> w * h
         | Square(s) -> s * s
-        | Circle(r) -> Math.PI * r * r
+        | Circle(r) -> pi * r * r
     override this.ToString() =
         match this with
         | Rectangle(w, h) -> 
@@ -67,4 +67,11 @@ type GeometricFigure2 =
         | Circle(r) -> 
             sprintf "Круг [радиус: %.2f, площадь: %.2f]" r this.Area
 
-figures |> List.iter (fun f -> (f :> IPrint).Print())
+figures 
+|> List.map (fun shape -> 
+    let area = calculateArea shape
+    match shape with
+    | Rectangle(w, h) -> $"Прямоугольник {w}x{h}: площадь = {area:.2f}"
+    | Square(s) -> $"Квадрат {s}x{s}: площадь = {area:.2f}"
+    | Circle(r) -> $"Круг r={r}: площадь = {area:.2f}")
+|> List.iter (printfn "%s")
