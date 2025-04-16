@@ -67,14 +67,7 @@ type GeometricFigure2 =
         | Circle(r) -> 
             sprintf "Круг [радиус: %.2f, площадь: %.2f]" r this.Area
 
-figures 
-|> List.map (fun shape -> 
-    let area = calculateArea shape
-    match shape with
-    | Rectangle(w, h) -> $"Прямоугольник {w}x{h}: площадь = {area:.2f}"
-    | Square(s) -> $"Квадрат {s}x{s}: площадь = {area:.2f}"
-    | Circle(r) -> $"Круг r={r}: площадь = {area:.2f}")
-|> List.iter (printfn "%s")
+figures |> List.iter (fun f -> printfn "%O" f)
 
 
 //lab 5
@@ -124,3 +117,40 @@ printfn "Функтор - закон идентичности: %b" (ListMonad.La
 printfn "Функтор - закон композиции: %b" (ListMonad.Laws.Composition((+)1) double list)
 printfn "Аппликативный - закон гомоморфизма: %b" (ListMonad.Laws.ApplicativeHomomorphism double 5)
 printfn "Монада - левосторонняя идентичность: %b" (ListMonad.Laws.MonadLeftIdentity multiplyAndAdd 5)
+
+// lab 6
+open FParsec
+
+type BoolExpr =
+    | True
+    | False
+    | And of BoolExpr * BoolExpr
+    | Or of BoolExpr * BoolExpr
+
+let ptrue = stringReturn "true" True
+let pfalse = stringReturn "false" False
+
+let pexpr, pexprRef = createParserForwardedToRef() 
+
+let pterm = 
+    choice [
+        ptrue
+        pfalse
+        between (pchar '(') (pchar ')') pexpr
+    ]
+
+let pand = stringReturn " AND " (fun x y -> And(x, y))
+let por = stringReturn " OR " (fun x y -> Or(x, y))
+
+do pexprRef := chainl1 pterm (pand <|> por) 
+
+let parseBoolExpr input =
+    match run pexpr input with
+    | Success(result, _, _) -> result
+    | Failure(error, _, _) -> failwithf "Ошибка разбора: %s" error
+
+let expr1 = parseBoolExpr "true AND false"
+let expr2 = parseBoolExpr "(true OR false) AND true"
+
+printfn "%A" expr1  
+printfn "%A" expr2  
