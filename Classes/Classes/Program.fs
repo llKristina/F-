@@ -46,7 +46,7 @@ let figures: IPrint  list = [
     Circle(2.5)
 ]
 
-figures |> List.iter (fun f -> f.Print())
+//figures |> List.iter (fun f -> f.Print())
 
 
 type GeometricFigure2 =
@@ -67,7 +67,7 @@ type GeometricFigure2 =
         | Circle(r) -> 
             sprintf "Круг [радиус: %.2f, площадь: %.2f]" r this.Area
 
-figures |> List.iter (fun f -> printfn "%O" f)
+//figures |> List.iter (fun f -> printfn "%O" f)
 
 
 //lab 5
@@ -110,13 +110,13 @@ let list = [10; 2; 13; 6; 15]
 let double x = x * 2
 let multiplyAndAdd x = [x; x * 10]
 
-printfn "Функтор map (удвоение): %A" (ListMonad.map double list)
-printfn "Аппликативный apply (декартово произведение): %A" (ListMonad.apply [double; (fun x -> x + 100)] list)
-printfn "Монада bind (размножение элементов): %A" (ListMonad.bind multiplyAndAdd list)
-printfn "Функтор - закон идентичности: %b" (ListMonad.Laws.Identity list)
-printfn "Функтор - закон композиции: %b" (ListMonad.Laws.Composition((+)1) double list)
-printfn "Аппликативный - закон гомоморфизма: %b" (ListMonad.Laws.ApplicativeHomomorphism double 5)
-printfn "Монада - левосторонняя идентичность: %b" (ListMonad.Laws.MonadLeftIdentity multiplyAndAdd 5)
+//printfn "Функтор map (удвоение): %A" (ListMonad.map double list)
+//printfn "Аппликативный apply (декартово произведение): %A" (ListMonad.apply [double; (fun x -> x + 100)] list)
+//printfn "Монада bind (размножение элементов): %A" (ListMonad.bind multiplyAndAdd list)
+//printfn "Функтор - закон идентичности: %b" (ListMonad.Laws.Identity list)
+//printfn "Функтор - закон композиции: %b" (ListMonad.Laws.Composition((+)1) double list)
+//printfn "Аппликативный - закон гомоморфизма: %b" (ListMonad.Laws.ApplicativeHomomorphism double 5)
+//printfn "Монада - левосторонняя идентичность: %b" (ListMonad.Laws.MonadLeftIdentity multiplyAndAdd 5)
 
 // lab 6
 open FParsec
@@ -152,5 +152,46 @@ let parseBoolExpr input =
 let expr1 = parseBoolExpr "true AND false"
 let expr2 = parseBoolExpr "(true OR false) AND true"
 
-printfn "%A" expr1  
-printfn "%A" expr2  
+//printfn "%A" expr1  
+//printfn "%A" expr2  
+
+//lab 7
+type AgentMessage =
+    | Greet of string
+    | Calculate of int * int
+    | GetRandomNumber of AsyncReplyChannel<int>
+    | Shutdown
+
+let agent = MailboxProcessor<AgentMessage>.Start(fun inbox ->
+    let rec loop () = async {
+        let! msg = inbox.Receive()
+        
+        match msg with
+        | Greet name -> 
+            printfn "Привет, %s!" name
+            return! loop()
+            
+        | Calculate (a, b) ->
+            printfn "Результат сложения %d и %d: %d" a b (a + b)
+            return! loop()
+            
+        | GetRandomNumber replyChannel ->
+            let rnd = Random()
+            replyChannel.Reply(rnd.Next(1, 100))
+            return! loop()
+            
+        | Shutdown ->
+            printfn "Агент завершает работу..."
+            return () 
+    }
+    loop ()
+)
+
+agent.Post(Greet "Иван")
+agent.Post(Calculate(5, 7))
+async {
+    let! number = agent.PostAndAsyncReply(GetRandomNumber)
+    printfn "Получено случайное число: %d" number
+} |> Async.Start
+Async.Sleep 100 |> Async.RunSynchronously
+agent.Post(Shutdown)
